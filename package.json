@@ -1,0 +1,25 @@
+{
+    "name": "colaGoodsVideoDataCrawler",
+    "version": "1.0.0",
+    "description": "采集各个自媒体平台的推广视频播放情况",
+    "homepage": "",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/642250185/colaGoodsVideoDataCrawler.git"
+    },
+    "author": {
+        "name": "星星",
+        "email": "nihao642250185@163.com"
+    },
+    "license": "ISC",
+    "devDependencies": {
+        "gulp": "^3.8.11",
+        "gulp-less": "^3.0.0"
+    },
+    "dependencies": {
+        "js-sleep": "^1.0.0",
+        "lodash": "^4.17.11",
+        "mongoose": "^5.3.16",
+        "sleep": "^5.2.3"
+    }
+}
