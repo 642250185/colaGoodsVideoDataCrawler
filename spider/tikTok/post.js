@@ -1,9 +1,9 @@
 const _ = require('lodash');
 const _path = require('path');
 const fs = require('fs-extra');
-const sleep = require('js-sleep/js-sleep');
 const request = require('superagent');
 const config = require('../../config/cfg');
+const sleep = require('js-sleep/js-sleep');
 const emumerate = require('../../utils/enumerate');
 const followUsers = require('../../file/tikTok/followUsers');
 const {domain, postRoute, followRoute, postDataPath} = config.tikTok;

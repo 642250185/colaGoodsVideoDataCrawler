@@ -14,4 +14,4 @@ const test = async(channel) => {
 };
 
 
-test("tikTok");
+test("bilibili");
