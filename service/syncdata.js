@@ -1,17 +1,22 @@
-require('../db/initDB');
-const fs = require('fs-extra');
+const _ = require('lodash');
 const mongoose = require('mongoose');
-const config = require('../config/cfg');
 
-const {postDataPath} = config.tikTok;
 
-let number = 0;
-const importTikTok = async(item) => {
+const checkPost = async(item) => {
     try {
-        const post = item;
-        post._id = new mongoose.Types.ObjectId;
-        console.info(`入库: [ ${++number} ]   ${post.channel}   ${post.account}   ${post.postId}  ${post.title}`);
-        await new $post(post).save();
+        let post = await $post.findOne({postId: item.postId});
+        if(_.isEmpty(post)){
+            return false;
+        } else {
+            post.playCount      = item.playCount;
+            post.collectCount   = item.collectCount;
+            post.shareCount     = item.shareCount;
+            post.commentCount   = item.commentCount;
+            post.likeCount      = item.likeCount;
+            post.recommendCount = item.recommendCount;
+            await post.save();
+            return true;
+        }
     } catch (e) {
         console.error(e);
         return e;
@@ -19,11 +24,29 @@ const importTikTok = async(item) => {
 };
 
 
-const importBatchTikTok = async() => {
+let number = 0;
+const importPost = async(item) => {
     try {
-        const posts = JSON.parse(fs.readFileSync(postDataPath));
+        const checkResult = await checkPost(item);
+        if(checkResult){
+            console.info(`update the post for postId: ${item.postId}`);
+        } else {
+            const post = item;
+            post._id = new mongoose.Types.ObjectId;
+            console.info(`入库: [ ${++number} ]   ${post.channel}   ${post.account}   ${post.postId}  ${post.title}`);
+            await new $post(post).save();
+        }
+    } catch (e) {
+        console.error(e);
+        return e;
+    }
+};
+
+
+const importBatchPosts = async(posts) => {
+    try {
         for(const item of posts){
-            await importTikTok(item);
+            await importPost(item);
         }
         return posts;
     } catch (e) {
@@ -32,5 +55,5 @@ const importBatchTikTok = async() => {
     }
 };
 
-importBatchTikTok();
-exports.importBatchTikTok = importBatchTikTok;
+
+exports.importBatchPosts = importBatchPosts;

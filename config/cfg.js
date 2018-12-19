@@ -17,6 +17,16 @@ const config = {
         postRoute: '/dynamic_svr/v1/dynamic_svr/space_history',
         postDataPath: path.join(__dirname, '..', 'data/bilibiliPost.json')
     },
+    budejie: {
+        domain: 'http://d.api.budejie.com',
+        postRoute: '/topic/my-topic/budejie-android-7.0.8/',
+        postDataPath: path.join(__dirname, '..', 'data/budejiePost.json')
+    },
+    sohu: {
+        domain: 'https://mp.sohu.com',
+        postRoute: '/v3/users/news/',
+        postDataPath: path.join(__dirname, '..', 'data/sohuPost.json')
+    },
     gifShow: {
 
     },

@@ -32,10 +32,11 @@ const getUserPosts = async(plist) =>{
         const video_meta = "fnver%3A0%2Cqn%3A32%2Cfnval%3A16";
         const visitor_uid = 383460727;
         const sign = "9cd43ec0badb5dfc4a9c776940e208d3";
+        await sleep(1000 * 5);  // 限制频率以防被bilibili屏蔽
+        // 请求地址
         const path = `${domain}${postRoute}?_device=${_device}&_hwid=${_hwid}&access_key=${access_key}&appkey=${appkey}&build=${build}&host_uid=${host_uid}&mobi_app=${mobi_app}&offset_dynamic_id=${offset_dynamic_id}&page=${page}&platform=${platform}&qn=${qn}&src=${src}&trace_id=${trace_id}&ts=${ts}&version=${version}&video_meta=${video_meta}&visitor_uid=${visitor_uid}&sign=${sign}`;
         let result = await request.get(path);
         result = JSON.parse(result.text);
-        // console.info('result:', result);
         const {code, msg, message, data} = result;
         const {has_more, fold_mgr, attentions, cards} = data;
         const nickname = "男山无颜祖";
@@ -74,7 +75,7 @@ const getUserPosts = async(plist) =>{
 const crawlingPosts = async() => {
     try {
         const postsData = await getUserPosts();
-        console.info('postsData.size: ', postsData.length);
+        console.info('bilibiliPosts.Size: ', postsData.length);
         await fs.ensureDir(_path.join(postDataPath, '..'));
         fs.writeFileSync(postDataPath, JSON.stringify(postsData, null, 4));
         return postsData;

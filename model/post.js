@@ -16,6 +16,10 @@ exports.post = new Schema({
     commentCount: Number,
     likeCount: Number,
     recommendCount: Number,
+    status: {
+        type: Boolean,
+        default: false,
+    },
     dateTime: {
         type: Date
     },

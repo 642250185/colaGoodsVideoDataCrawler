@@ -156,7 +156,7 @@ const getAllUserPosts = async() => {
 const crawlingPosts = async() => {
     try {
         const postsData = await getAllUserPosts();
-        console.info('postsData.size: ', postsData.length);
+        console.info('tikTokPosts.Size: ', postsData.length);
         await fs.ensureDir(_path.join(postDataPath, '..'));
         fs.writeFileSync(postDataPath, JSON.stringify(postsData, null, 4));
         return postsData;
