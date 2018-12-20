@@ -6,6 +6,7 @@ const sleep = require('js-sleep/js-sleep');
 const config = require('../../config/cfg');
 const emumerate = require('../../utils/enumerate');
 const cookies = require('../../file/sohu/Cookies');
+const {formatDate} = require('../../utils/dateUtil');
 
 const {domain, postRoute, postDataPath} = config.sohu;
 
@@ -29,9 +30,11 @@ const getUserPosts = async(cookie, pno, plist) => {
         const {news, totalCount} = result;
         let collectCount = 0; let recommendCount = 0; const _plist = [];
         for(const item of news){
+            let dateTime = item.createdTime;
+            dateTime = dateTime / 1000;
             _plist.push({
                 channel         : emumerate.channel.sohu,
-                account         : cookie.key,
+                nickname        : cookie.key,
                 postId          : item.id,
                 title           : item.title,
                 playCount       : item.pv,                      // 播放量
@@ -40,7 +43,7 @@ const getUserPosts = async(cookie, pno, plist) => {
                 commentCount    : item.cmt,                     // 评论量
                 likeCount       : 0,                            // 点赞量
                 recommendCount  : recommendCount,               // 推荐数
-                dateTime        : item.createdTime              // 时间
+                dateTime        : formatDate(new Date(Number(dateTime * 1000)))              // 时间
             });
             console.info(`${++number}  渠道: ${emumerate.channel.sohu}  昵称: ${cookie.key}  postId: ${item.id}  播放量: ${item.pv}  收藏量: ${collectCount}  分享量: 0  评论量: ${item.cmt}  点赞量: 0  推荐数: ${recommendCount}  时间: ${item.createdTime}  标题: ${item.title}`);
         }

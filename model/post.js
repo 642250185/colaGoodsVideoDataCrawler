@@ -7,7 +7,7 @@ exports.post = new Schema({
         default: new mongoose.Types.ObjectId
     },
     channel: String,
-    account: String,
+    nickname: String,
     postId: String,
     title: String,
     playCount: Number,

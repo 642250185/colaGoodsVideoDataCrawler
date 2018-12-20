@@ -35,7 +35,7 @@ const getUserPosts = async(cookie, index, plist) => {
             }
             _plist.push({
                 channel         : emumerate.channel.budejie,
-                account         : cookie.key,
+                nickname        : cookie.key,
                 postId          : item.id,
                 title           : item.text,
                 playCount       : playCount,                    // 播放量

@@ -5,6 +5,7 @@ const request = require('superagent');
 const sleep = require('js-sleep/js-sleep');
 const config = require('../../config/cfg');
 const emumerate = require('../../utils/enumerate');
+const {formatDate} = require('../../utils/dateUtil');
 const {domain, postRoute, postDataPath} = config.bilibili;
 
 let number = 0;
@@ -46,7 +47,7 @@ const getUserPosts = async(plist) =>{
             card = JSON.parse(card);
             _plist.push({
                 channel         : emumerate.channel.bilibili,
-                account         : nickname,
+                nickname        : nickname,
                 postId          : desc.dynamic_id,
                 title           : card.desc,
                 playCount       : card.stat.view,       // 播放量
@@ -55,7 +56,7 @@ const getUserPosts = async(plist) =>{
                 commentCount    : card.stat.reply,      // 评论量
                 likeCount       : card.stat.like,       // 点赞量
                 recommendCount  : recommendCount,       // 推荐数
-                dateTime        : card.pubdate          // 时间
+                dateTime        : formatDate(new Date(Number(card.pubdate * 1000)))       // 时间
             });
             console.info(`number: ${number}  渠道: ${emumerate.channel.bilibili}  账号: ${nickname}  postId: ${desc.dynamic_id}  播放量: ${card.stat.view}  收藏量: ${collectCount}  转发量: ${card.stat.share}  评论量: ${card.stat.reply}  点赞量: ${card.stat.like}  推荐量: ${recommendCount}  日期: ${card.pubdate}  标题: ${card.desc} `);
         }

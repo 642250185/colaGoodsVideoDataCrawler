@@ -8,6 +8,7 @@ const checkPost = async(item) => {
         if(_.isEmpty(post)){
             return false;
         } else {
+            post.nickname       = item.nickname;
             post.playCount      = item.playCount;
             post.collectCount   = item.collectCount;
             post.shareCount     = item.shareCount;
@@ -33,7 +34,7 @@ const importPost = async(item) => {
         } else {
             const post = item;
             post._id = new mongoose.Types.ObjectId;
-            console.info(`入库: [ ${++number} ]   ${post.channel}   ${post.account}   ${post.postId}  ${post.title}`);
+            console.info(`入库: [ ${++number} ]   ${post.channel}   ${post.nickname}   ${post.postId}  ${post.title}`);
             await new $post(post).save();
         }
     } catch (e) {

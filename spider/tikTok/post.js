@@ -5,6 +5,7 @@ const request = require('superagent');
 const config = require('../../config/cfg');
 const sleep = require('js-sleep/js-sleep');
 const emumerate = require('../../utils/enumerate');
+const {formatDate} = require('../../utils/dateUtil');
 const followUsers = require('../../file/tikTok/followUsers');
 const {domain, postRoute, followRoute, postDataPath} = config.tikTok;
 
@@ -112,7 +113,7 @@ const getUserPosts = async(uid, nickname, maxCursor, plist) => {
             const {statistics} = item;
             _plist.push({
                 channel         : emumerate.channel.tikTok,
-                account         : nickname,
+                nickname        : nickname,
                 postId          : item.aweme_id,
                 title           : item.desc,
                 playCount       : statistics.play_count,    // 播放量
@@ -121,7 +122,7 @@ const getUserPosts = async(uid, nickname, maxCursor, plist) => {
                 commentCount    : statistics.comment_count, // 评论量
                 likeCount       : statistics.digg_count,    // 点赞量
                 recommendCount  : recommendCount,           // 推荐数
-                dateTime        : item.create_time          // 时间
+                dateTime        : formatDate(new Date(Number(item.create_time * 1000)))          // 时间
             });
             console.info(`number: ${number}  渠道: ${emumerate.channel.tikTok}  账号: ${nickname}  postId: ${item.aweme_id}  播放量: ${statistics.play_count}  收藏量: ${collectCount}  转发量: ${statistics.share_count}  评论量: ${statistics.comment_count}  点赞量: ${statistics.digg_count}  推荐量: ${recommendCount}  日期: ${item.create_time}  标题: ${item.desc} `);
         }
