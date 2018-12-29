@@ -3,7 +3,7 @@ const config = require('../config/cfg');
 
 const {host, port, dbname} = config.mongodb;
 
-mongoose.connect(`mongodb://${host}:${port}/${dbname}`);
+mongoose.connect(`mongodb://${host}:${port}/${dbname}`, {useNewUrlParser: true});
 mongoose.Promise = global.Promise;
 global.$mongoose = mongoose;
 

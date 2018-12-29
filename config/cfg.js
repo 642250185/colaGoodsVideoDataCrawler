@@ -2,7 +2,7 @@ const path = require('path');
 
 const config = {
     mongodb: {
-        host: '127.0.0.1',
+        host: '10.0.10.230',
         port: 27017,
         dbname: 'colaGoods'
     },
