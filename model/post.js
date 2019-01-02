@@ -10,12 +10,34 @@ exports.post = new Schema({
     nickname: String,
     postId: String,
     title: String,
-    playCount: Number,
-    collectCount: Number,
-    shareCount: Number,
-    commentCount: Number,
-    likeCount: Number,
-    recommendCount: Number,
+    playCount: {
+        type: Number,
+        default: 0
+    },
+    collectCount: {
+        type: Number,
+        default: 0
+    },
+    shareCount: {
+        type: Number,
+        default: 0
+    },
+    commentCount: {
+        type: Number,
+        default: 0
+    },
+    likeCount: {
+        type: Number,
+        default: 0
+    },
+    recommendCount: {
+        type: Number,
+        default: 0
+    },
+    fansCount: {
+        type: Number,
+        default: 0
+    },
     status: {
         type: Boolean,
         default: false,

@@ -16,7 +16,6 @@ const start = async(channel) => {
         console.info(`Prepare to import data......`);
         await importBatchPosts(posts);
 
-        console.info(`end`);
         console.info(`-------------------${channel} ------------------- end`);
         return true;
     } catch (e) {

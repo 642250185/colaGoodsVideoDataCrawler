@@ -10,6 +10,7 @@ const config = {
         domain: 'https://aweme.snssdk.com',
         postRoute: '/aweme/v1/aweme/post/',
         followRoute: '/aweme/v1/user/following/list/',
+        followCountRoute: 'https://api-eagle.amemv.com/aweme/v1/user/',
         postDataPath: path.join(__dirname, '..', 'data/tikTokPost.json')
     },
     bilibili: {
@@ -19,6 +20,7 @@ const config = {
     },
     budejie: {
         domain: 'http://d.api.budejie.com',
+        userInfoRoute: '/user/info',
         postRoute: '/topic/my-topic/budejie-android-7.0.8/',
         postDataPath: path.join(__dirname, '..', 'data/budejiePost.json')
     },
