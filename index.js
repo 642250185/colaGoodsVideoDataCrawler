@@ -39,4 +39,14 @@ const execute = async() => {
 };
 
 
-execute();
+const executeSingle = async(channel) => {
+    try {
+        await start(channel);
+    } catch (e) {
+        console.error(e);
+        return e;
+    }
+};
+
+
+executeSingle('toutiao');

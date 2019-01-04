@@ -32,6 +32,12 @@ const config = {
     gifShow: {
 
     },
+    toutiao: {
+        domain: 'https://lf-hl.snssdk.com',
+        postRoute: '/api/feed/profile/v1/',
+        followCountRoute: 'https://lg-hl.snssdk.com/user/profile/homepage/v7/',
+        postDataPath: path.join(__dirname, '..', 'data/toutiaoPost.json')
+    },
     env: function () {
         global.$config = this;
         return global.$config;
