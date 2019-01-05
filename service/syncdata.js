@@ -4,6 +4,11 @@ const mongoose = require('mongoose');
 
 const checkPost = async(item) => {
     try {
+        // postId 存在为空的情况。
+        if(_.isEmpty(item.postId)){
+            console.warn(`postId does not exist.`);
+            return false;
+        }
         let post = await $post.findOne({postId: item.postId});
         if(_.isEmpty(post)){
             return false;
