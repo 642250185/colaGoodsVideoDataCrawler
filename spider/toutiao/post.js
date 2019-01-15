@@ -142,17 +142,22 @@ const getUserPosts = async(userId, username, fansCount, maxCursor, plist) => {
             if(!_.isEmpty(content.raw_data)){
                 const {raw_data} = content;
                 // title 跟 createTime 在 raw_data节点下。
-                title           = raw_data.title;
-                createTime      = formatDate(new Date(Number(raw_data.create_time * 1000)));
+                title = raw_data.title;
+                //  存在raw_data节点下 没有create_time 的情况
+                if(!_.isEmpty(raw_data.create_time)){
+                    createTime = formatDate(new Date(Number(raw_data.create_time * 1000)));
+                }
                 // 存在返回数据不一直
                 if(_.isEmpty(raw_data.comment_base)){
-                    const {action} = raw_data;
-                    playCount       = action.play_count;
-                    collectCount    = action.bury_count;
-                    shareCount      = action.share_count;
-                    commentCount    = action.comment_count;
-                    likeCount       = action.digg_count;
-                } else {
+                    if(!_.isEmpty(raw_data.action)){
+                        const {action} = raw_data;
+                        playCount       = action.play_count;
+                        collectCount    = action.bury_count;
+                        shareCount      = action.share_count;
+                        commentCount    = action.comment_count;
+                        likeCount       = action.digg_count;
+                    }
+                } else if(!_.isEmpty(raw_data.comment_base)){
                     const commentBase = raw_data.comment_base;
                     const commentBaseAction = commentBase.action;
                     // 挂载在 comment_base 节点之下。
@@ -180,6 +185,7 @@ const getUserPosts = async(userId, username, fansCount, maxCursor, plist) => {
             console.info(`number: ${number}  渠道: ${emumerate.channel.toutiao}  账号: ${username}  postId: ${content.id}  播放量: ${playCount}   粉丝数: ${fansCount}   收藏量: ${collectCount}  转发量: ${shareCount}  评论量: ${commentCount}  点赞量: ${likeCount}  推荐量: 0  日期: ${createTime}  标题: ${title} `);
         }
         plist = plist.concat(_plist);
+        console.error(`has_more: `, has_more);
         if(has_more){
             return await getUserPosts(userId, username, fansCount, offset, plist);
         } else {
@@ -194,14 +200,18 @@ const getUserPosts = async(userId, username, fansCount, maxCursor, plist) => {
 
 const getAllUserPosts = async() => {
     try {
-        let final = [];
+        let final = [], interval = 0;
         for(const user of users){
+            if(interval != 0){
+                console.info(`间歇15秒后, 进行下一个帐号的数据采集。`);
+                await sleep(1000 * 15);
+            }
+            interval++;
             const {userId, username} = user;
             const fansCount = await getFollowerCount(userId);
             const userPostsData = await getUserPosts(userId, username, fansCount);
             console.info(`>>>>> username: ${username},  posts.length:`, userPostsData.length);
             final = final.concat(userPostsData);
-            break;
         }
         return final;
     } catch (e) {
