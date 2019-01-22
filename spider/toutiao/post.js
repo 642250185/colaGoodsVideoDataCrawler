@@ -4,10 +4,75 @@ const fs = require('fs-extra');
 const request = require('superagent');
 const config = require('../../config/cfg');
 const sleep = require('js-sleep/js-sleep');
-const users = require('../../file/toutiao/users');
 const emumerate = require('../../utils/enumerate');
 const {formatDate} = require('../../utils/dateUtil');
 const {domain, postRoute, postDataPath, followCountRoute} = config.toutiao;
+
+const getToFollowUserInfo = async() => {
+    try {
+        const _domain = `https://lf.snssdk.com`;
+        const _openRoute = `/user/relation/following/v2/`;
+
+        const user_id = 109775590177;
+        const offset = 0;
+        const count = 20;
+        const cursor = "";
+        const iid = 57644051654;
+        const device_id = 58838615711;
+        const ac = "wifi";
+        const channel = "oppo-cpa";
+        const aid = 13;
+        const app_name = "news_article";
+        const version_code = 707;
+        const version_name = "7.0.7";
+        const device_platform = "android";
+        const ab_client = "a1%2Cc4%2Ce1%2Cf1%2Cg2%2Cf7";
+        const ab_group = "94569%2C102751%2C181428";
+        const ab_feature = "94569%2C102751";
+        const abflag = 3;
+        const ssmix = "a";
+        const device_type = "PBAM00";
+        const device_brand = "OPPO";
+        const language = "zh";
+        const os_api = 27;
+        const os_version = "8.1.0";
+        const uuid = 860083046316050;
+        const openudid = "cff77562f33d7a27";
+        const manifest_version_code = 707;
+        const resolution = "720*1520";
+        const dpi = 320;
+        const update_version_code = 70714;
+        const _rticket = 1547803505132;
+        const plugin = 26958;
+        const pos = "5r_-9Onkv6e_eyoseAEueCUfv7G_8fLz-vTp6Pn4v6esrK6zpKmppK-osb_x_On06ej5-L-nr6-zqK6tpaiosb_88Pzt3vTp5L-nv3sqLHgBLnglH7-xv_zw_O3R8vP69Ono-fi_p6ysrrOkqaSlrKuxv_zw_O3R_On06ej5-L-nr6-zqK-qpa6v4A%3D%3D";
+        const fp = "9rT_P2KbJ2TrFlHSPlU1F2meJlxb";
+        const tma_jssdk_version = "1.10.3.3";
+        const rom_version = "coloros_v5.1_pbam00_11_a.13";
+        const ts = 1547803505;
+        const as = "a265d904e1c7cceba16999";
+        const mas = "003fca6cb1dc2ae4791ffb57565c5e6cfd24eaecac525d5de5";
+
+        const path = `${_domain}${_openRoute}?user_id=${user_id}&offset=${offset}&count=${count}&cursor=${cursor}&iid=${iid}&device_id=${device_id}&ac=${ac}&channel=${channel}&aid=${aid}&app_name=${app_name}&version_code=${version_code}&version_name=${version_name}&device_platform=${device_platform}&ab_client=${ab_client}&ab_group=${ab_group}&ab_feature=${ab_feature}&abflag=${abflag}&ssmix=${ssmix}&device_type=${device_type}&device_brand=${device_brand}&language=${language}&os_api=${os_api}&os_version=${os_version}&uuid=${uuid}&openudid=${openudid}&manifest_version_code=${manifest_version_code}&resolution=${resolution}&dpi=${dpi}&update_version_code=${update_version_code}&_rticket=${_rticket}&plugin=${plugin}&pos=${pos}&fp=${fp}&tma_jssdk_version=${tma_jssdk_version}&rom_version=${rom_version}&ts=${ts}&as=${as}&mas=${mas}`;
+        let result = await request.get(path);
+        result = JSON.parse(result.text);
+        const {has_more, data} = result;
+        const {users} = data;
+        const userInfo = [];
+        for(const item of users){
+            const {user} = item;
+            const {info} = user;
+            const {user_id, name} = info;
+            userInfo.push({
+                userId  : user_id,
+                username: name
+            });
+        }
+        return userInfo;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
+};
 
 
 const getFollowerCount = async(uid) => {
@@ -200,6 +265,7 @@ const getUserPosts = async(userId, username, fansCount, maxCursor, plist) => {
 
 const getAllUserPosts = async() => {
     try {
+        const users = await getToFollowUserInfo();
         let final = [], interval = 0;
         for(const user of users){
             if(interval != 0){

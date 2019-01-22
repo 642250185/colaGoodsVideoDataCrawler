@@ -49,10 +49,11 @@ const getFollowingUser = async() => {
         let result = await request.get(path);
         result = JSON.parse(result.text);
         console.info('result: ', result);
-        const {log_pb, extra, has_more, status_code, followings, max_time, offset, min_time, total, myself_user_id} = result;
+        const {has_more, followings} = result;
         const followingsUser = [];
         for(const item of followings){
             const {uid, nickname} = item;
+            console.info(`uid: ${uid},  nickname: ${nickname}`);
             followingsUser.push({uid, nickname});
         }
         return followingsUser;
