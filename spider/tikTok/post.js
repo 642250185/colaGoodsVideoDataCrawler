@@ -162,6 +162,7 @@ const getUserPosts = async(uid, nickname, fansCount, maxCursor, plist) => {
         let result = await request.get(path);
         result = JSON.parse(result.text);
         const {status_code, min_cursor, max_cursor, has_more, aweme_list, extra, log_pb} = result;
+        console.info(`aweme_list: %j`, aweme_list);
         let collectCount = 0; let recommendCount = 0; const _plist = [];
         for(const item of aweme_list){
             const {statistics} = item;
@@ -198,7 +199,9 @@ const getAllUserPosts = async() => {
     try {
         let final = [];
         for(const user of followUsers){
+            console.info(`user: %j`, user);
             const fansCount = await getFollowerCount(user.uid);
+            console.info(`fansCount: %d`, fansCount);
             const userPostsData = await getUserPosts(user.uid, user.nickname, fansCount);
             final = final.concat(userPostsData);
         }

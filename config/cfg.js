@@ -38,6 +38,16 @@ const config = {
         followCountRoute: 'https://lg-hl.snssdk.com/user/profile/homepage/v7/',
         postDataPath: path.join(__dirname, '..', 'data/toutiaoPost.json')
     },
+    volcano: {
+        domain: 'https://api-a.huoshan.com',
+        postRoute: '/hotsoon/user/',
+        postDataPath: path.join(__dirname, '..', 'data/volcanoPost.json')
+    },
+    pipixia: {
+        domain: 'https://is.snssdk.com',
+        postRoute: '/bds/user/publish_list/',
+        postDataPath: path.join(__dirname, '..', 'data/pipixiaPost.json')
+    },
     env: function () {
         global.$config = this;
         return global.$config;
