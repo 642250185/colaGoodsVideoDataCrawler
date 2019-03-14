@@ -61,5 +61,5 @@ const importBatchPosts = async(posts) => {
     }
 };
 
-
+exports.importPost = importPost;
 exports.importBatchPosts = importBatchPosts;

@@ -4,6 +4,8 @@ const budejieSpider = require('./budejie');
 const sohuSpider = require('./sohu');
 const toutiaoSpider = require('./toutiao');
 const volcanoSpider = require('./volcano');
+const pipixiaSpider = require('./pipixia');
+const bigFishSpider = require('./bigFish');
 
 module.exports = class SpiderFactory {
     static getSpider(channel) {
@@ -20,6 +22,10 @@ module.exports = class SpiderFactory {
                 return toutiaoSpider;
             case 'volcano':
                 return volcanoSpider;
+            case 'pipixia':
+                return pipixiaSpider;
+            case 'bigFish':
+                return bigFishSpider;
             default :
                 return ""
         }

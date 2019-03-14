@@ -13,7 +13,7 @@ const {domain, postRoute,  postDataPath} = config.volcano;
 
 
 let number = 0;
-const getUserPosts = async(userId, plist, timeCode) => {
+const getUserPosts = async(userId, username, plist, timeCode) => {
     try {
         ++number;
         let timeParams = `max_time`;
@@ -70,7 +70,7 @@ const getUserPosts = async(userId, plist, timeCode) => {
             const {stats} = content;
             _plist.push({
                 channel         : emumerate.channel.volcano,
-                nickname        : "鲤锦开箱",
+                nickname        : username,
                 postId          : content.id,
                 title           : content.description,
                 playCount       : stats.play_count,     // 播放量
@@ -82,11 +82,11 @@ const getUserPosts = async(userId, plist, timeCode) => {
                 fansCount       : 0,                    // 粉丝数
                 dateTime        : formatDate(new Date(Number(content.create_time * 1000)))
             });
-            console.info(`number: ${number}  渠道: ${emumerate.channel.volcano}  账号: ""  postId: ${content.id}  播放量: ${stats.play_count}   粉丝数: 0   收藏量: ${collectCount}  转发量: ${stats.share_count}  评论量: ${stats.comment_count}  点赞量: ${stats.digg_count}  推荐量: 0  日期: ${content.create_time}  标题: ${content.description} `);
+            console.info(`number: ${number}  渠道: ${emumerate.channel.volcano}  账号: ${username}  postId: ${content.id}  播放量: ${stats.play_count}   粉丝数: 0   收藏量: ${collectCount}  转发量: ${stats.share_count}  评论量: ${stats.comment_count}  点赞量: ${stats.digg_count}  推荐量: 0  日期: ${content.create_time}  标题: ${content.description} `);
         }
         plist = plist.concat(_plist);
         if(has_more){
-            return await getUserPosts(userId, plist, max_time);
+            return await getUserPosts(userId, username, plist, max_time);
         } else {
             return plist;
         }
@@ -101,8 +101,8 @@ const getAllUserPosts = async() => {
     try {
         let final = [];
         for(const item of users){
-            const {userId} = item;
-            const userPostsData = await getUserPosts(userId);
+            const {userId, username} = item;
+            const userPostsData = await getUserPosts(userId, username);
             final = final.concat(userPostsData);
         }
         return final;

@@ -118,7 +118,7 @@ const getFollowerCount = async(uid) => {
 
 
 let number = 0;
-const getUserPosts = async(uid, nickname, fansCount, maxCursor, plist) => {
+const _getUserPosts = async(uid, nickname, fansCount, maxCursor, plist) => {
     try {
         ++number;
         // 基础参数
@@ -184,13 +184,89 @@ const getUserPosts = async(uid, nickname, fansCount, maxCursor, plist) => {
         }
         plist = plist.concat(_plist);
         if(has_more){
-            return await getUserPosts(uid, nickname, fansCount, max_cursor, plist);
+            return await _getUserPosts(uid, nickname, fansCount, max_cursor, plist);
         } else {
             return plist;
         }
     } catch (e) {
         console.error(e);
         return [];
+    }
+};
+
+
+const getUserPosts = async(uid, nickname, fansCount, maxCursor, plist) => {
+    const _domain = `https://aweme-hl.snssdk.com`;
+    const _openRoute = `/aweme/v1/forward/list/?`;
+
+    const user_id = uid;
+    ++number;
+    // 基础参数
+    if(_.isEmpty(plist)){
+        plist = [];
+        maxCursor = 0;
+    }
+    const min_cursor = 0;
+    const count = 20;
+    const ts = 1551873411;
+    const js_sdk_version = "1.10.4";
+    const app_type = "normal";
+    const manifest_version_code = 530;
+    const _rticket = 1551873412213;
+    const ac = "wifi";
+    const device_id = 58838615711;
+    const iid = 65298980704;
+    const mcc_mnc = 46001;
+    const os_version = "8.1.0";
+    const channel = "oppo";
+    const version_code = 530;
+    const device_type = "PBAM00";
+    const language = "zh";
+    const uuid = 860083046316050;
+    const resolution = "720*1520";
+    const openudid = "cff77562f33d7a27";
+    const update_version_code = 5302;
+    const app_name = "aweme";
+    const version_name = "5.3.0";
+    const os_api = 27;
+    const device_brand = "OPPO";
+    const ssmix = "a";
+    const device_platform = "android";
+    const dpi = 320;
+    const aid = 1128;
+    const as = "a155cb973388ccb5af4866";
+    const cp = "b587cb5e33f67656e1auOy";
+    const mas = "01a5754fa463d5edee0e91458905ad8b376c6c1c2c6686ac46c6c6";
+    const path = `${_domain}${_openRoute}user_id=${user_id}&max_cursor=${maxCursor}&min_cursor=${min_cursor}&count=${count}&ts=${ts}&js_sdk_version=${js_sdk_version}&app_type=${app_type}&manifest_version_code=${manifest_version_code}&_rticket=${_rticket}&ac=${ac}&device_id=${device_id}&iid=${iid}&mcc_mnc=${mcc_mnc}&os_version=${os_version}&channel=${channel}&version_code=${version_code}&device_type=${device_type}&language=${language}&uuid=${uuid}&resolution=${resolution}&openudid=${openudid}&update_version_code=${update_version_code}&app_name=${app_name}&version_name=${version_name}&os_api=${os_api}&device_brand=${device_brand}&ssmix=${ssmix}&device_platform=${device_platform}&dpi=${dpi}&aid=${aid}&as=${as}&cp=${cp}&mas=${mas}`;
+    let result = await request.get(path);
+    result = JSON.parse(result.text);
+    const {max_cursor, has_more, dongtai_list} = result;
+    console.info(`max_cursor: ${max_cursor},   has_more: ${has_more},   dongtai_list: ${dongtai_list}`);
+    let collectCount = 0; let recommendCount = 0; const _plist = [];
+    for(const item of dongtai_list){
+        const {aweme} = item;
+        const {aweme_id, desc, statistics, create_time} = aweme;
+        _plist.push({
+            channel         : emumerate.channel.tikTok,
+            nickname        : nickname,
+            postId          : aweme_id,
+            title           : desc,
+            playCount       : statistics.play_count,    // 播放量
+            collectCount    : collectCount,             // 收藏量
+            shareCount      : statistics.share_count,   // 转发量 | 分享量
+            commentCount    : statistics.comment_count, // 评论量
+            likeCount       : statistics.digg_count,    // 点赞量
+            recommendCount  : recommendCount,           // 推荐数
+            fansCount       : fansCount,                // 粉丝数
+            dateTime        : formatDate(new Date(Number(create_time * 1000)))          // 时间
+        });
+        console.info(`number: ${number}  渠道: ${emumerate.channel.tikTok}  账号: ${nickname}  postId: ${aweme_id}  播放量: ${statistics.play_count}   粉丝数: 0   收藏量: ${collectCount}  转发量: ${statistics.share_count}  评论量: ${statistics.comment_count}  点赞量: ${statistics.digg_count}  推荐量: ${recommendCount}  日期: ${create_time}  标题: ${desc} `);
+    }
+    plist = plist.concat(_plist);
+    if(has_more){
+        return await getUserPosts(uid, nickname, fansCount, max_cursor, plist);
+    } else {
+        return plist;
     }
 };
 

@@ -48,6 +48,11 @@ const config = {
         postRoute: '/bds/user/publish_list/',
         postDataPath: path.join(__dirname, '..', 'data/pipixiaPost.json')
     },
+    bigFish: {
+        domain: 'https://mp.dayu.com',
+        postRoute: '/mobile/api/getContentList',
+        postDataPath: path.join(__dirname, '..', 'data/bigFishPost.json')
+    },
     env: function () {
         global.$config = this;
         return global.$config;
